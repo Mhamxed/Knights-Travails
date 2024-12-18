@@ -52,16 +52,71 @@ function knightNextMoves([x, y]) {
 
 function knightMovesMap() {
     let map = new Map()
-    for (let i = 0; i < 7; i++) {
-        for (let j = 0; i < 7; j++) {
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
             const square = [i, j]
             const validMoves = knightNextMoves(square)
-            map.set(square, validMoves)
+            map.set(`${square}`, validMoves)
+        }
+    }
+    return map
+}
+
+function knightMoves(start, end) {
+    if (start[0] < 0 || start[1] > 7) {
+        return 'invaide stating point!'
+    }
+    if (end[0] < 0 || end[1] > 7) {
+        return 'invaide target point!'
+    }
+    let q = [{node: start, path: []}]
+    let seen = new Set()
+    const AdjMap = knightMovesMap()
+    while (q.length > 0) {
+        const {node, path} = q.shift()
+        seen.add(node)
+        path.push(node)
+        const nei_nodes = AdjMap.get(`${node}`)
+        for (let nei_node of nei_nodes) {
+            if (!seen.has(nei_node)) {
+                const n = {node: nei_node, path: [...path]}
+                q.push(n)
+            }
+        }
+        if (node[0] === end[0] && node[1] === end[1]) {
+            return path
         }
     }
 }
 
-function knightMoves([start_x, start_y], [end_x, end_y]) {
-    
-
+function printResult(array) {
+    console.log(`You made it in ${array.length - 1} moves!  Here's your path:`)
+    array.forEach(e => {
+        console.log(e)
+    })
 }
+
+printResult(knightMoves([5,0],[3,6])) 
+/*You made it in 4 moves!  Here's your path:
+[ 5, 0 ]
+[ 6, 2 ]
+[ 7, 4 ]
+[ 5, 5 ]
+[ 3, 6 ]*/
+
+printResult(knightMoves([3,0],[7,6]))
+/*You made it in 4 moves!  Here's your path:
+[ 3, 0 ]
+[ 4, 2 ]
+[ 3, 4 ]
+[ 5, 5 ]
+[ 7, 6 ]*/
+
+printResult(knightMoves([4,1],[2,6]))
+/*You made it in 3 moves!  Here's your path:
+[ 4, 1 ]
+[ 5, 3 ]
+[ 4, 5 ]
+[ 2, 6 ]*/
+
+
