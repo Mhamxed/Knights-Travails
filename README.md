@@ -1,1 +1,1 @@
-Implement the shortest path for a knight in a chess board to move from the start square to the distination square.
+Implement the shortest path for a knight in a chess board to move from the start square to the destination square.
